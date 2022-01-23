@@ -6,58 +6,36 @@ export class Feedback extends React.Component {
     good: 0,
     neutral: 0,
     bad: 0,
-    total: 0,
-    positive: 0,
   };
 
-  clickedGood = () => {
+  whenClicked = (opt) => {
     this.setState((prevState) => ({
-      good: prevState.good + 1,
-    }));
-  };
-  clickedNeutral = () => {
-    this.setState((prevState) => ({
-      neutral: prevState.neutral + 1,
-    }));
-  };
-  clickedBad = () => {
-    this.setState((prevState) => ({
-      bad: prevState.bad + 1,
+      [opt]: prevState[opt] + 1,
     }));
   };
 
-  countTotalFeedback = () => {
-    this.setState((prevState) => ({
-      total: prevState.good + prevState.neutral + prevState.bad,
-    }));
-  };
-
-  countPositiveFeedbackPercentage = () => {
-    this.setState((prevState) => ({
-      positive: Math.round((prevState.good / prevState.total) * 100),
-    }));
-  };
+  thisStats = (opt) => {};
 
   render() {
+    const { good, neutral, bad } = this.state;
+    const totalFeedback = good + neutral + bad;
+    const positiveFeedback = Math.round((good / totalFeedback) * 100);
     return (
       <div>
         <Section title={"Please leave feedback"}>
           <FeedbackOptions
-            onGood={this.clickedGood}
-            onNeutral={this.clickedNeutral}
-            onBad={this.clickedBad}
-            onTotal={this.countTotalFeedback}
-            onPositive={this.countPositiveFeedbackPercentage}
+            options={["good", "neutral", "bad"]}
+            onLeaveFeedback={this.whenClicked}
           />
         </Section>
         <Section title={"Statistics"}>
-          {this.state.total ? (
+          {good || bad || neutral ? (
             <Statistics
-              good={this.state.good}
-              neutral={this.state.neutral}
-              bad={this.state.bad}
-              total={this.state.total}
-              positive={this.state.positive}
+              good={good}
+              neutral={neutral}
+              bad={bad}
+              total={totalFeedback}
+              positive={positiveFeedback}
             />
           ) : (
             <Notification message={"There is no feedback"} />
