@@ -14,8 +14,6 @@ export class Feedback extends React.Component {
     }));
   };
 
-  thisStats = (opt) => {};
-
   render() {
     const { good, neutral, bad } = this.state;
     const totalFeedback = good + neutral + bad;
